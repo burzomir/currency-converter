@@ -1,9 +1,9 @@
 "use client";
-import { Autocomplete, Stack, TextField } from "@mui/material";
+import { Stack } from "@mui/material";
 import { CurrencyExchange } from "@mui/icons-material";
-import { useId } from "react";
-import { NumericFormat } from "react-number-format";
-import { useSeparators } from "@/hooks";
+import { useState } from "react";
+import CurrencySelect from "@/components/currency-select";
+import AmountInput from "@/components/amount-input";
 
 export default function Home() {
   return (
@@ -22,30 +22,16 @@ export default function Home() {
 }
 
 function CurrencyInput() {
-  const currencyId = useId();
-  const amountId = useId();
-  const { thousandSeparator, decimalSeparator } = useSeparators();
+  const [currency, setCurrency] = useState(currencies[0]);
+  const [amount, setAmount] = useState(0);
   return (
     <Stack gap={3}>
-      <Autocomplete
-        options={currencies}
-        getOptionLabel={(option) => `${option.code} - ${option.name}`}
-        getOptionKey={(option) => option.code}
-        renderInput={(params) => <TextField {...params} label="Currency" />}
-        id={currencyId}
-        disableClearable
-        disablePortal
-        defaultValue={currencies[0]}
-        size="small"
+      <CurrencySelect
+        currencies={currencies}
+        value={currency}
+        onChange={setCurrency}
       />
-      <NumericFormat
-        customInput={TextField}
-        id={amountId}
-        label="Amount"
-        allowNegative={false}
-        thousandSeparator={thousandSeparator}
-        decimalSeparator={decimalSeparator}
-      />
+      <AmountInput value={amount} onChange={setAmount} />
     </Stack>
   );
 }
