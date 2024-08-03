@@ -2,6 +2,7 @@
 import { Autocomplete, Stack, TextField } from "@mui/material";
 import { CurrencyExchange } from "@mui/icons-material";
 import { useId } from "react";
+import { NumericFormat } from "react-number-format";
 
 export default function Home() {
   return (
@@ -36,7 +37,14 @@ function CurrencyInput() {
         defaultValue={currencies[0]}
         size="small"
       />
-      <TextField id={amountId} label="Amount" />
+      <NumericFormat
+        customInput={TextField}
+        id={amountId}
+        label="Amount"
+        allowNegative={false}
+        thousandSeparator="."
+        decimalSeparator=","
+      />
     </Stack>
   );
 }
