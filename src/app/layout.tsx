@@ -6,6 +6,7 @@ import "@fontsource/roboto/700.css";
 import { CssBaseline, Stack, Typography } from "@mui/material";
 import { ReactNode } from "react";
 import { CurrencyExchange } from "@mui/icons-material";
+import ThemeProvider from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "Currency converter",
@@ -19,21 +20,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <CssBaseline />
-        <Stack gap={5} height="100vh" justifyContent="center">
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="center"
-            gap={3}
-          >
-            <Typography variant="h4" component="h1">
-              Currency converter
-            </Typography>
-            <CurrencyExchange fontSize="large" />
+        <ThemeProvider>
+          <CssBaseline />
+          <Stack gap={5} height="100vh" justifyContent="center">
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="center"
+              gap={3}
+            >
+              <Typography variant="h4" component="h1">
+                Currency converter
+              </Typography>
+              <CurrencyExchange fontSize="large" />
+            </Stack>
+            {children}
           </Stack>
-          {children}
-        </Stack>
+        </ThemeProvider>
       </body>
     </html>
   );
