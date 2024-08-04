@@ -13,18 +13,20 @@ const delay = (() => {
 const fail = (() => {
   try {
     const v = process.env.DEVELOPMENT_CURRENCY_SERVICE_FAIL!;
-    const n = parseInt(v, 10);
-    if (n <= 0) {
-      return false;
-    }
-    return true;
+    return v.split(",");
   } catch (_) {
-    return false;
+    return [];
   }
 })();
 
 export class DevelopmentCurrencyService implements CurrencyService {
   async getCurrencies(): Promise<Currency[]> {
+    await new Promise((resolve) => {
+      setTimeout(resolve, delay);
+    });
+    if (fail.includes("currencies")) {
+      throw new Error("");
+    }
     return [
       { code: currencyCodeFromString("EUR"), name: "Euro", precision: 2 },
       { code: currencyCodeFromString("USD"), name: "US Dollar", precision: 2 },
@@ -39,7 +41,7 @@ export class DevelopmentCurrencyService implements CurrencyService {
     await new Promise((resolve) => {
       setTimeout(resolve, delay);
     });
-    if (fail) {
+    if (fail.includes("convert")) {
       throw new Error("");
     }
     return { value: data.amount * rates[data.from][data.to] };
