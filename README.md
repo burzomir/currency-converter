@@ -47,6 +47,7 @@ Open http://localhost:3000 or https://localhost:3000
 - ✅ Auto light/dark theme
 - ✅ Server side currencies data fetching
 - ✅ Proxy endpoint for currency conversion
+- ✅ [Postman collection for third party API testing](currencybeacon.postman_collection.json)
 - ❌ Bidirectional FIAT and Crypto currencies conversion (third party API issues)
 - ❌ Tests (The app is currently in the prototype stage)
 
@@ -78,3 +79,7 @@ Open http://localhost:3000 or https://localhost:3000
 - [Architecture] Forwarding requests to third party services via custom server side services to prevent sensitive data leakage and gain better control over the entire system.
 - [Architecture] Request tracking to avoid race conditions inside of the `Converter` component
 - [Architecture] Request debouncing to avoid unnecessary request while a user is till typing inside of the `Converter` component
+
+## Third party
+
+I created a Postman collection that helped me to learn the CurrencyBeacon API.
