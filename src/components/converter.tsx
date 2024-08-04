@@ -13,35 +13,50 @@ export default function Converter(props: ConverterProps) {
   const initialFormState = initFormState(props.currencies[0].code);
   const [formState, setFormState] = useState(initialFormState);
   const requestRef = useRef<ReturnType<typeof setTimeout>>();
-  const fromOnChange = (from: FormField) => {
+  const fromOnChange = async (from: FormField) => {
     clearTimeout(requestRef.current);
     setFormState((formState) =>
       produce(formState, (draft) => {
         draft.from = from;
       })
     );
-    requestRef.current = setTimeout(() => {
-      setFormState((formState) =>
-        produce(formState, (draft) => {
-          draft.to.amount = formState.from.amount * 2;
-        })
-      );
-    }, 1000);
+    const data = {
+      from: from.currencyCode,
+      to: formState.to.currencyCode,
+      amount: from.amount,
+    };
+    const response = await fetch("/api/convert", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    const { value } = await response.json();
+    setFormState((formState) =>
+      produce(formState, (draft) => {
+        draft.to.amount = value;
+      })
+    );
   };
-  const toOnChange = (to: FormField) => {
-    clearTimeout(requestRef.current);
+  const toOnChange = async (to: FormField) => {
     setFormState((formState) =>
       produce(formState, (draft) => {
         draft.to = to;
       })
     );
-    requestRef.current = setTimeout(() => {
-      setFormState((formState) =>
-        produce(formState, (draft) => {
-          draft.from.amount = formState.to.amount * 2;
-        })
-      );
-    }, 1000);
+    const data = {
+      from: to.currencyCode,
+      to: formState.from.currencyCode,
+      amount: to.amount,
+    };
+    const response = await fetch("/api/convert", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    const { value } = await response.json();
+    setFormState((formState) =>
+      produce(formState, (draft) => {
+        draft.from.amount = value;
+      })
+    );
   };
   return (
     <ConverterForm
