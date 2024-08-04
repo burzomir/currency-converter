@@ -1,6 +1,15 @@
 import { Currency, CurrencyCode, currencyCodeFromString } from "@/types";
 import { CurrencyService } from ".";
 
+const delay = (() => {
+  try {
+    const v = process.env.DEVELOPMENT_CURRENCY_SERVICE_DELAY!;
+    return parseInt(v, 10);
+  } catch (_) {
+    return 0;
+  }
+})();
+
 export class DevelopmentCurrencyService implements CurrencyService {
   async getCurrencies(): Promise<Currency[]> {
     return [
@@ -15,7 +24,7 @@ export class DevelopmentCurrencyService implements CurrencyService {
     amount: number;
   }): Promise<{ value: number }> {
     await new Promise((resolve) => {
-      setTimeout(resolve, 1000);
+      setTimeout(resolve, delay);
     });
     return { value: data.amount * rates[data.from][data.to] };
   }
