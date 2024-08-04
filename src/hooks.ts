@@ -1,5 +1,11 @@
 import { useSyncExternalStore } from "react";
 
+/**
+ * Hook that tries to identify localized separators for number formatting
+ * Based on the current browser language
+ * Thousand separator is used to improve readability of big numbers by grouping them
+ * Decimal separator separates integral and fractional parts of a number.
+ */
 export function useSeparators() {
   const language = useLanguage();
   const formatter = Intl.NumberFormat(language);
@@ -12,6 +18,10 @@ export function useSeparators() {
   return { decimalSeparator, thousandSeparator };
 }
 
+/**
+ * Hook that provides access to navigator.language
+ * It tells what language is currently used by a user
+ */
 function useLanguage() {
   return useSyncExternalStore(
     subscribeLanguage,

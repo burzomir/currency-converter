@@ -4,6 +4,9 @@ export type Currency = {
   precision: number;
 };
 
+/**
+ * Helps to prevent accidental misuse of the code property
+ */
 export type CurrencyCode = string & { brand: "CurrencyCode" };
 
 export function currencyCodeFromString(code: string) {
