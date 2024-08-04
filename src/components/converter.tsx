@@ -8,6 +8,7 @@ import ConverterForm, {
 } from "./converter-form";
 import { useEffect, useRef, useState } from "react";
 import { produce } from "immer";
+import { Alert, Snackbar, SnackbarOrigin } from "@mui/material";
 
 export type ConverterProps = {
   currencies: Currency[];
@@ -21,6 +22,7 @@ enum Debounce {
 }
 
 export default function Converter(props: ConverterProps) {
+  const [serviceUnreachable, setServiceUnreachable] = useState(false);
   const initialFormState = initFormState(props.currencies[0].code);
   const [formState, setFormState] = useState(initialFormState);
   const requestIdRef = useRef<string>();
@@ -41,16 +43,21 @@ export default function Converter(props: ConverterProps) {
     debounce: Debounce
   ) => {
     clearTimeout(timeoutRef.current);
+    setServiceUnreachable(false);
     timeoutRef.current = setTimeout(
       async () => {
         let requestId = crypto.randomUUID();
         requestIdRef.current = requestId;
-        const value = await requestConversion(data);
-        if (requestIdRef.current !== requestId) {
-          return;
+        try {
+          const value = await requestConversion(data);
+          if (requestIdRef.current !== requestId) {
+            return;
+          }
+          const newState = apply(value);
+          setFormState(newState);
+        } catch (_) {
+          setServiceUnreachable(true);
         }
-        const newState = apply(value);
-        setFormState(newState);
       },
       (() => {
         switch (debounce) {
@@ -121,15 +128,25 @@ export default function Converter(props: ConverterProps) {
   };
 
   return (
-    <ConverterForm
-      currencies={props.currencies}
-      state={formState}
-      fromChange={fromChange}
-      toCurrencyChange={toCurrencyChange}
-      toAmountChange={toAmountChange}
-    />
+    <>
+      <ConverterForm
+        currencies={props.currencies}
+        state={formState}
+        fromChange={fromChange}
+        toCurrencyChange={toCurrencyChange}
+        toAmountChange={toAmountChange}
+      />
+      <Snackbar open={serviceUnreachable} anchorOrigin={snackbackOrigin}>
+        <Alert severity="error">Service unreachable</Alert>
+      </Snackbar>
+    </>
   );
 }
+
+const snackbackOrigin: SnackbarOrigin = {
+  vertical: "top",
+  horizontal: "center",
+};
 
 type Data = {
   from: CurrencyCode;

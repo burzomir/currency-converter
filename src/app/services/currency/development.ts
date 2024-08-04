@@ -26,6 +26,7 @@ export class DevelopmentCurrencyService implements CurrencyService {
     await new Promise((resolve) => {
       setTimeout(resolve, delay);
     });
+    throw new Error("")
     return { value: data.amount * rates[data.from][data.to] };
   }
 }
