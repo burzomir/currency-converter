@@ -1,6 +1,7 @@
 export type Currency = {
   code: CurrencyCode;
   name: string;
+  precision: number;
 };
 
 export type CurrencyCode = string & { brand: "CurrencyCode" };

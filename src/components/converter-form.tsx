@@ -25,6 +25,17 @@ export default function ConverterForm({
   toCurrencyChange,
   toAmountChange,
 }: ConverterFormProps) {
+  const fromCurrency = React.useMemo(() => {
+    return currencies.find(
+      (currency) => currency.code === state.from.currencyCode
+    )!;
+  }, [currencies, state.from.currencyCode]);
+  const toCurrency = React.useMemo(() => {
+    return currencies.find(
+      (currency) => currency.code === state.to.currencyCode
+    )!;
+  }, [currencies, state.to.currencyCode]);
+
   return (
     <Stack
       direction={{ xs: "column", sm: "row" }}
@@ -35,11 +46,7 @@ export default function ConverterForm({
       <Stack gap={3}>
         <CurrencySelect
           currencies={currencies}
-          value={
-            currencies.find(
-              (currency) => currency.code === state.from.currencyCode
-            )!
-          }
+          value={fromCurrency}
           onChange={(currency) =>
             fromChange({ ...state.from, currencyCode: currency.code })
           }
@@ -47,20 +54,21 @@ export default function ConverterForm({
         <AmountInput
           value={state.from.amount}
           onChange={(amount) => fromChange({ ...state.from, amount: amount })}
+          precision={fromCurrency.precision}
         />
       </Stack>
       <CurrencyExchange fontSize="large" color="info" />
       <Stack gap={3}>
         <CurrencySelect
           currencies={currencies}
-          value={
-            currencies.find(
-              (currency) => currency.code === state.to.currencyCode
-            )!
-          }
+          value={toCurrency}
           onChange={(currency) => toCurrencyChange(currency.code)}
         />
-        <AmountInput value={state.to.amount} onChange={toAmountChange} />
+        <AmountInput
+          value={state.to.amount}
+          onChange={toAmountChange}
+          precision={toCurrency.precision}
+        />
       </Stack>
     </Stack>
   );

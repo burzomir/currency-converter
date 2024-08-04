@@ -20,6 +20,7 @@ export class CurrencyBeaconCurrencyService implements CurrencyService {
     const currencies: Currency[] = json.response.map((data: any) => ({
       code: currencyCodeFromString(data.short_code),
       name: data.name,
+      precision: data.precision,
     }));
     return currencies;
   }

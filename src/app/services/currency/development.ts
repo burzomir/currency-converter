@@ -4,9 +4,9 @@ import { CurrencyService } from ".";
 export class DevelopmentCurrencyService implements CurrencyService {
   async getCurrencies(): Promise<Currency[]> {
     return [
-      { code: currencyCodeFromString("EUR"), name: "Euro" },
-      { code: currencyCodeFromString("USD"), name: "US Dollar" },
-      { code: currencyCodeFromString("PLN"), name: "Zloty" },
+      { code: currencyCodeFromString("EUR"), name: "Euro", precision: 2 },
+      { code: currencyCodeFromString("USD"), name: "US Dollar", precision: 2 },
+      { code: currencyCodeFromString("PLN"), name: "Zloty", precision: 2 },
     ];
   }
   async convert(data: {

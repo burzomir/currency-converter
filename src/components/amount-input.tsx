@@ -11,9 +11,14 @@ export type AmountInputProps = {
   value: number;
   // eslint-disable-next-line
   onChange: (value: number) => void;
+  precision: number;
 };
 
-export default function AmountInput({ onChange, value }: AmountInputProps) {
+export default function AmountInput({
+  onChange,
+  value,
+  precision,
+}: AmountInputProps) {
   const id = useId();
   const { thousandSeparator, decimalSeparator } = useSeparators();
   const onChange_ = useCallback(
@@ -35,7 +40,7 @@ export default function AmountInput({ onChange, value }: AmountInputProps) {
       decimalSeparator={decimalSeparator}
       value={value}
       onValueChange={onChange_}
-      decimalScale={4}
+      decimalScale={precision}
     />
   );
 }
