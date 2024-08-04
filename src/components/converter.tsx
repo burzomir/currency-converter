@@ -1,8 +1,8 @@
 "use client";
 
-import { Currency } from "@/types";
+import { Currency, CurrencyCode } from "@/types";
 import ConverterForm, { FormField, initFormState } from "./converter-form";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { produce } from "immer";
 
 export type ConverterProps = {
@@ -12,48 +12,51 @@ export type ConverterProps = {
 export default function Converter(props: ConverterProps) {
   const initialFormState = initFormState(props.currencies[0].code);
   const [formState, setFormState] = useState(initialFormState);
-  const requestRef = useRef<ReturnType<typeof setTimeout>>();
-  const fromOnChange = async (from: FormField) => {
-    clearTimeout(requestRef.current);
-    setFormState((formState) =>
-      produce(formState, (draft) => {
-        draft.from = from;
-      })
-    );
-    const data = {
-      from: from.currencyCode,
-      to: formState.to.currencyCode,
-      amount: from.amount,
-    };
-    const response = await fetch("/api/convert", {
-      method: "POST",
-      body: JSON.stringify(data),
+  const fromChange = async (from: FormField) => {
+    const newState = produce(formState, (draft) => {
+      draft.from = from;
     });
-    const { value } = await response.json();
-    setFormState((formState) =>
-      produce(formState, (draft) => {
+    setFormState(newState);
+    const value = await convert({
+      from: newState.from.currencyCode,
+      to: newState.to.currencyCode,
+      amount: newState.from.amount,
+    });
+    setFormState(
+      produce(newState, (draft) => {
         draft.to.amount = value;
       })
     );
   };
-  const toOnChange = async (to: FormField) => {
-    setFormState((formState) =>
-      produce(formState, (draft) => {
-        draft.to = to;
+  const toCurrencyChange = async (currencyCode: CurrencyCode) => {
+    const newState = produce(formState, (draft) => {
+      draft.to.currencyCode = currencyCode;
+    });
+    setFormState(newState);
+    const value = await convert({
+      from: newState.from.currencyCode,
+      to: newState.to.currencyCode,
+      amount: newState.from.amount,
+    });
+    setFormState(
+      produce(newState, (draft) => {
+        draft.to.amount = value;
       })
     );
-    const data = {
-      from: to.currencyCode,
-      to: formState.from.currencyCode,
-      amount: to.amount,
-    };
-    const response = await fetch("/api/convert", {
-      method: "POST",
-      body: JSON.stringify(data),
+  };
+  const toAmountChange = async (amount: number) => {
+    const newState = produce(formState, (draft) => {
+      draft.to.amount = amount;
     });
-    const { value } = await response.json();
-    setFormState((formState) =>
-      produce(formState, (draft) => {
+    setFormState(newState);
+    const data = {
+      from: newState.to.currencyCode,
+      to: newState.from.currencyCode,
+      amount: newState.to.amount,
+    };
+    const value = await convert(data);
+    setFormState(
+      produce(newState, (draft) => {
         draft.from.amount = value;
       })
     );
@@ -62,8 +65,22 @@ export default function Converter(props: ConverterProps) {
     <ConverterForm
       currencies={props.currencies}
       state={formState}
-      fromOnChange={fromOnChange}
-      toOnChange={toOnChange}
+      fromChange={fromChange}
+      toCurrencyChange={toCurrencyChange}
+      toAmountChange={toAmountChange}
     />
   );
+}
+
+async function convert(data: {
+  from: CurrencyCode;
+  to: CurrencyCode;
+  amount: number;
+}): Promise<number> {
+  const response = await fetch("/api/convert", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  const { value } = await response.json();
+  return value;
 }

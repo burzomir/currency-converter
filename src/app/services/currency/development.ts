@@ -19,7 +19,7 @@ export class DevelopmentCurrencyService implements CurrencyService {
 }
 
 const rates: { [key: string]: { [key: string]: number } } = {
-  EUR: { USD: 1.1, PLN: 4.3 },
-  USD: { EUR: 1 / 1.1, PLN: 3.7 },
-  PLN: { USD: 1 / 3.7, EUR: 1 / 4.3 },
+  EUR: { EUR: 1, USD: 1.1, PLN: 4.3 },
+  USD: { EUR: 1 / 1.1, USD: 1, PLN: 3.7 },
+  PLN: { EUR: 1 / 4.3, USD: 1 / 3.7, PLN: 1 },
 };

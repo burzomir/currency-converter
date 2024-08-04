@@ -32,6 +32,7 @@ export default function AmountInput({ onChange, value }: AmountInputProps) {
       decimalSeparator={decimalSeparator}
       value={value}
       onValueChange={onChange_}
+      decimalScale={4}
     />
   );
 }

@@ -11,16 +11,19 @@ export type ConverterFormProps = {
   currencies: Currency[];
   state: FormState;
   // eslint-disable-next-line
-  fromOnChange: (field: FormField) => void;
+  fromChange: (field: FormField) => void;
   // eslint-disable-next-line
-  toOnChange: (field: FormField) => void;
+  toCurrencyChange: (currencyCode: CurrencyCode) => void;
+  // eslint-disable-next-line
+  toAmountChange: (amount: number) => void;
 };
 
 export default function ConverterForm({
   currencies,
   state,
-  fromOnChange,
-  toOnChange,
+  fromChange,
+  toCurrencyChange,
+  toAmountChange,
 }: ConverterFormProps) {
   return (
     <Stack
@@ -38,12 +41,12 @@ export default function ConverterForm({
             )!
           }
           onChange={(currency) =>
-            fromOnChange({ ...state.from, currencyCode: currency.code })
+            fromChange({ ...state.from, currencyCode: currency.code })
           }
         />
         <AmountInput
           value={state.from.amount}
-          onChange={(amount) => fromOnChange({ ...state.from, amount: amount })}
+          onChange={(amount) => fromChange({ ...state.from, amount: amount })}
         />
       </Stack>
       <CurrencyExchange fontSize="large" color="info" />
@@ -55,14 +58,9 @@ export default function ConverterForm({
               (currency) => currency.code === state.to.currencyCode
             )!
           }
-          onChange={(currency) =>
-            toOnChange({ ...state.to, currencyCode: currency.code })
-          }
+          onChange={(currency) => toCurrencyChange(currency.code)}
         />
-        <AmountInput
-          value={state.to.amount}
-          onChange={(amount) => toOnChange({ ...state.to, amount: amount })}
-        />
+        <AmountInput value={state.to.amount} onChange={toAmountChange} />
       </Stack>
     </Stack>
   );
@@ -80,7 +78,7 @@ export type FormField = {
 
 export function initFormState(currencyCode: CurrencyCode): FormState {
   return {
-    from: { currencyCode, amount: 0 },
-    to: { currencyCode, amount: 0 },
+    from: { currencyCode, amount: 1 },
+    to: { currencyCode, amount: 1 },
   };
 }
