@@ -2,7 +2,7 @@
 
 import { Currency, CurrencyCode } from "@/types";
 import ConverterForm, { FormField, initFormState } from "./converter-form";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { produce } from "immer";
 
 export type ConverterProps = {
@@ -12,16 +12,22 @@ export type ConverterProps = {
 export default function Converter(props: ConverterProps) {
   const initialFormState = initFormState(props.currencies[0].code);
   const [formState, setFormState] = useState(initialFormState);
+  const requestIdRef = useRef<string>();
   const fromChange = async (from: FormField) => {
     const newState = produce(formState, (draft) => {
       draft.from = from;
     });
     setFormState(newState);
+    let requestId = crypto.randomUUID();
+    requestIdRef.current = requestId;
     const value = await convert({
       from: newState.from.currencyCode,
       to: newState.to.currencyCode,
       amount: newState.from.amount,
     });
+    if (requestIdRef.current !== requestId) {
+      return;
+    }
     setFormState(
       produce(newState, (draft) => {
         draft.to.amount = value;
@@ -33,11 +39,16 @@ export default function Converter(props: ConverterProps) {
       draft.to.currencyCode = currencyCode;
     });
     setFormState(newState);
+    let requestId = crypto.randomUUID();
+    requestIdRef.current = requestId;
     const value = await convert({
       from: newState.from.currencyCode,
       to: newState.to.currencyCode,
       amount: newState.from.amount,
     });
+    if (requestIdRef.current !== requestId) {
+      return;
+    }
     setFormState(
       produce(newState, (draft) => {
         draft.to.amount = value;
@@ -54,7 +65,12 @@ export default function Converter(props: ConverterProps) {
       to: newState.from.currencyCode,
       amount: newState.to.amount,
     };
+    let requestId = crypto.randomUUID();
+    requestIdRef.current = requestId;
     const value = await convert(data);
+    if (requestIdRef.current !== requestId) {
+      return;
+    }
     setFormState(
       produce(newState, (draft) => {
         draft.from.amount = value;

@@ -14,6 +14,9 @@ export class DevelopmentCurrencyService implements CurrencyService {
     to: CurrencyCode;
     amount: number;
   }): Promise<{ value: number }> {
+    await new Promise((resolve) => {
+      setTimeout(resolve, 1000);
+    });
     return { value: data.amount * rates[data.from][data.to] };
   }
 }
