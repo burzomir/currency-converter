@@ -10,8 +10,8 @@ import AmountInput from "./amount-input";
 export type ConverterFormProps = {
   currencies: Currency[];
   state: FormState;
-  fromOnChange: (field: Field) => void;
-  toOnChange: (field: Field) => void;
+  fromOnChange: (field: FormField) => void;
+  toOnChange: (field: FormField) => void;
 };
 
 export default function ConverterForm({
@@ -67,11 +67,11 @@ export default function ConverterForm({
 }
 
 export type FormState = {
-  from: Field;
-  to: Field;
+  from: FormField;
+  to: FormField;
 };
 
-type Field = {
+export type FormField = {
   currencyCode: CurrencyCode;
   amount: number;
 };

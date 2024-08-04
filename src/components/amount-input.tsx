@@ -12,8 +12,12 @@ export default function AmountInput({ onChange, value }: AmountInputProps) {
   const id = useId();
   const { thousandSeparator, decimalSeparator } = useSeparators();
   const onChange_ = useCallback(
-    (value: NumberFormatValues) => {
-      onChange(value.floatValue || 0);
+    ({ floatValue }: NumberFormatValues) => {
+      const newValue = floatValue || 0;
+      if (newValue === value) {
+        return;
+      }
+      onChange(newValue);
     },
     [onChange]
   );
