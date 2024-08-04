@@ -9,6 +9,7 @@ import { useCallback, useId } from "react";
 export type CurrencySelectProps = {
   currencies: Currency[];
   value: Currency;
+  // eslint-disable-next-line
   onChange: (value: Currency) => void;
 };
 

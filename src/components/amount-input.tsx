@@ -5,6 +5,7 @@ import { NumberFormatValues, NumericFormat } from "react-number-format";
 
 export type AmountInputProps = {
   value: number;
+  // eslint-disable-next-line
   onChange: (value: number) => void;
 };
 
@@ -19,7 +20,7 @@ export default function AmountInput({ onChange, value }: AmountInputProps) {
       }
       onChange(newValue);
     },
-    [onChange]
+    [value, onChange]
   );
   return (
     <NumericFormat
