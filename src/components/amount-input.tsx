@@ -1,7 +1,11 @@
 import { useSeparators } from "@/hooks";
 import { TextField } from "@mui/material";
 import { useCallback, useId } from "react";
-import { NumberFormatValues, NumericFormat } from "react-number-format";
+import {
+  NumberFormatValues,
+  NumericFormat,
+  SourceInfo,
+} from "react-number-format";
 
 export type AmountInputProps = {
   value: number;
@@ -13,14 +17,13 @@ export default function AmountInput({ onChange, value }: AmountInputProps) {
   const id = useId();
   const { thousandSeparator, decimalSeparator } = useSeparators();
   const onChange_ = useCallback(
-    ({ floatValue }: NumberFormatValues) => {
-      const newValue = floatValue || 0;
-      if (newValue === value) {
+    ({ floatValue }: NumberFormatValues, sourceInfo: SourceInfo) => {
+      if (sourceInfo.source === "prop") {
         return;
       }
-      onChange(newValue);
+      onChange(floatValue || 0);
     },
-    [value, onChange]
+    [onChange]
   );
   return (
     <NumericFormat
