@@ -6,7 +6,7 @@ import ConverterForm, {
   FormState,
   initFormState,
 } from "./converter-form";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { produce } from "immer";
 
 export type ConverterProps = {
@@ -17,20 +17,28 @@ export default function Converter(props: ConverterProps) {
   const initialFormState = initFormState(props.currencies[0].code);
   const [formState, setFormState] = useState(initialFormState);
   const requestIdRef = useRef<string>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
-  const convert = async (
+  useEffect(() => {
+    return () => clearTimeout(timeoutRef.current);
+  }, []);
+
+  const convert = (
     data: Data,
     // eslint-disable-next-line
     apply: (value: number) => FormState
   ) => {
-    let requestId = crypto.randomUUID();
-    requestIdRef.current = requestId;
-    const value = await requestConversion(data);
-    if (requestIdRef.current !== requestId) {
-      return;
-    }
-    const newState = apply(value);
-    setFormState(newState);
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(async () => {
+      let requestId = crypto.randomUUID();
+      requestIdRef.current = requestId;
+      const value = await requestConversion(data);
+      if (requestIdRef.current !== requestId) {
+        return;
+      }
+      const newState = apply(value);
+      setFormState(newState);
+    }, 300);
   };
 
   const fromChange = async (from: FormField) => {
