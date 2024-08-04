@@ -1,3 +1,7 @@
+# Currency converter
+
+![Running app screenshot](screenshot.png)
+
 ## Getting Started
 
 ### System Requirements (Next.js):
