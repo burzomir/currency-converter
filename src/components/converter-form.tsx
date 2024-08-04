@@ -1,8 +1,8 @@
 "use client";
 
 import { Currency, CurrencyCode } from "@/types";
-import { CurrencyExchange } from "@mui/icons-material";
-import { Stack } from "@mui/material";
+import { SwapHoriz } from "@mui/icons-material";
+import { IconButton, Stack } from "@mui/material";
 import * as React from "react";
 import CurrencySelect from "./currency-select";
 import AmountInput from "./amount-input";
@@ -16,6 +16,8 @@ export type ConverterFormProps = {
   toCurrencyChange: (currencyCode: CurrencyCode) => void;
   // eslint-disable-next-line
   toAmountChange: (amount: number) => void;
+  // eslint-disable-next-line
+  onSwap: (formState: FormState) => void;
 };
 
 export default function ConverterForm({
@@ -24,6 +26,7 @@ export default function ConverterForm({
   fromChange,
   toCurrencyChange,
   toAmountChange,
+  onSwap,
 }: ConverterFormProps) {
   const fromCurrency = React.useMemo(() => {
     return currencies.find(
@@ -57,7 +60,12 @@ export default function ConverterForm({
           precision={fromCurrency.precision}
         />
       </Stack>
-      <CurrencyExchange fontSize="large" color="info" />
+      <IconButton
+        aria-label="Swap"
+        onClick={() => onSwap({ from: state.to, to: state.from })}
+      >
+        <SwapHoriz fontSize="large" />
+      </IconButton>
       <Stack gap={3}>
         <CurrencySelect
           currencies={currencies}

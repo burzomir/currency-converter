@@ -28,11 +28,13 @@ export default function Converter(props: ConverterProps) {
   const requestIdRef = useRef<string>();
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
+  const cleanup = () => {
+    requestIdRef.current = undefined;
+    clearTimeout(timeoutRef.current);
+  };
+
   useEffect(() => {
-    return () => {
-      requestIdRef.current = undefined;
-      clearTimeout(timeoutRef.current);
-    };
+    return cleanup;
   }, []);
 
   const convert = (
@@ -127,6 +129,11 @@ export default function Converter(props: ConverterProps) {
     convert(data, finalize, Debounce.Debounce);
   };
 
+  const onSwap = (state: FormState) => {
+    cleanup();
+    setFormState(state);
+  };
+
   return (
     <>
       <ConverterForm
@@ -135,6 +142,7 @@ export default function Converter(props: ConverterProps) {
         fromChange={fromChange}
         toCurrencyChange={toCurrencyChange}
         toAmountChange={toAmountChange}
+        onSwap={onSwap}
       />
       <Snackbar open={serviceUnreachable} anchorOrigin={snackbackOrigin}>
         <Alert severity="error">Service unreachable</Alert>
