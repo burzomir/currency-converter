@@ -25,7 +25,7 @@ export class DevelopmentCurrencyService implements CurrencyService {
       setTimeout(resolve, delay);
     });
     if (fail.includes("currencies")) {
-      throw new Error("");
+      throw new Error("Forced to fail");
     }
     return [
       { code: currencyCodeFromString("EUR"), name: "Euro", precision: 2 },
@@ -42,7 +42,7 @@ export class DevelopmentCurrencyService implements CurrencyService {
       setTimeout(resolve, delay);
     });
     if (fail.includes("convert")) {
-      throw new Error("");
+      throw new Error("Forced to fail");
     }
     return { value: data.amount * rates[data.from][data.to] };
   }
