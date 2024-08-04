@@ -50,6 +50,7 @@ Open http://localhost:3000 or https://localhost:3000
 - ✅ [Postman collection for third party API testing](currencybeacon.postman_collection.json)
 - ❌ Bidirectional FIAT and Crypto currencies conversion (third party API issues)
 - ❌ Tests (The app is currently in the prototype stage)
+- ❌ Number format customization (mobile devices may display a numeric keyboard that makes it impossible to type in decimal separator, the number formatting is independent from the language setting)
 
 ## Project structure
 
