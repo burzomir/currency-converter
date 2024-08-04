@@ -27,7 +27,10 @@ export default function Converter(props: ConverterProps) {
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
-    return () => clearTimeout(timeoutRef.current);
+    return () => {
+      requestIdRef.current = undefined;
+      clearTimeout(timeoutRef.current);
+    };
   }, []);
 
   const convert = (
