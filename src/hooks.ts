@@ -13,7 +13,11 @@ export function useSeparators() {
 }
 
 function useLanguage() {
-  return useSyncExternalStore(subscribeLanguage, getLanguage);
+  return useSyncExternalStore(
+    subscribeLanguage,
+    getLanguage,
+    getServerSnapshot
+  );
 }
 
 function subscribeLanguage(callback: () => void) {
@@ -23,4 +27,8 @@ function subscribeLanguage(callback: () => void) {
 
 function getLanguage() {
   return navigator.language;
+}
+
+function getServerSnapshot() {
+  return "en";
 }
