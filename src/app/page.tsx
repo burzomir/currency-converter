@@ -1,10 +1,15 @@
 import Converter from "@/components/converter";
-import { Currency } from "@/types";
+import { Currency, currencyCodeFromString } from "@/types";
+import { Stack } from "@mui/material";
 import assert from "assert";
 
 export default async function Home() {
   const currencies = await fetchCurrencies();
-  return <Converter currencies={currencies} />;
+  return (
+    <Stack height="100vh" alignItems="center" justifyContent="center">
+      <Converter currencies={currencies} />
+    </Stack>
+  );
 }
 
 async function fetchCurrencies() {
@@ -17,7 +22,7 @@ async function fetchCurrencies() {
   const response = await fetch(url, { next: { revalidate: 60 * 60 * 24 } });
   const json = await response.json();
   const currencies: Currency[] = json.response.map((data: any) => ({
-    code: data.short_code,
+    code: currencyCodeFromString(data.short_code),
     name: data.name,
   }));
   return currencies;
