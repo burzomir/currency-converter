@@ -10,6 +10,19 @@ const delay = (() => {
   }
 })();
 
+const fail = (() => {
+  try {
+    const v = process.env.DEVELOPMENT_CURRENCY_SERVICE_FAIL!;
+    const n = parseInt(v, 10);
+    if (n <= 0) {
+      return false;
+    }
+    return true;
+  } catch (_) {
+    return false;
+  }
+})();
+
 export class DevelopmentCurrencyService implements CurrencyService {
   async getCurrencies(): Promise<Currency[]> {
     return [
@@ -26,7 +39,9 @@ export class DevelopmentCurrencyService implements CurrencyService {
     await new Promise((resolve) => {
       setTimeout(resolve, delay);
     });
-    throw new Error("")
+    if (fail) {
+      throw new Error("");
+    }
     return { value: data.amount * rates[data.from][data.to] };
   }
 }
