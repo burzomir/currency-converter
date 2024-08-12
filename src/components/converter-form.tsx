@@ -12,7 +12,7 @@ export type ConverterFormProps = {
   state: FormState;
   fromChange: (field: FormField) => void;
   toCurrencyChange: (currencyCode: CurrencyCode) => void;
-  toAmountChange: (amount: number) => void;
+  toAmountChange: (amount: number | undefined) => void;
   onSwap: (formState: FormState) => void;
 };
 
@@ -85,7 +85,7 @@ export type FormState = {
 
 export type FormField = {
   currencyCode: CurrencyCode;
-  amount: number;
+  amount: number | undefined;
 };
 
 export function initFormState(currencyCode: CurrencyCode): FormState {

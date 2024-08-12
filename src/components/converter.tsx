@@ -15,7 +15,7 @@ export type ConverterProps = {
 };
 
 enum Debounce {
-  Debounce,  
+  Debounce,
   NoDebounce,
 }
 
@@ -37,13 +37,15 @@ export default function Converter(props: ConverterProps) {
 
   const convert = (
     data: Data,
-    
     apply: (value: number) => FormState,
-    
     debounce: Debounce
   ) => {
     clearTimeout(timeoutRef.current);
     setServiceUnreachable(false);
+    if (typeof data.amount === "undefined") {
+      requestIdRef.current = undefined;
+      return;
+    }
     timeoutRef.current = setTimeout(
       async () => {
         const requestId = crypto.randomUUID();
@@ -110,7 +112,7 @@ export default function Converter(props: ConverterProps) {
     convert(data, finalize, Debounce.NoDebounce);
   };
 
-  const toAmountChange = async (amount: number) => {
+  const toAmountChange = async (amount: number | undefined) => {
     const newState = produce(formState, (draft) => {
       draft.to.amount = amount;
     });
@@ -157,7 +159,7 @@ const snackbackOrigin: SnackbarOrigin = {
 type Data = {
   from: CurrencyCode;
   to: CurrencyCode;
-  amount: number;
+  amount: number | undefined;
 };
 
 async function requestConversion(data: Data): Promise<number> {

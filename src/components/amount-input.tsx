@@ -8,8 +8,8 @@ import {
 } from "react-number-format";
 
 export type AmountInputProps = {
-  value: number;
-  onChange: (value: number) => void;
+  value: number | undefined;
+  onChange: (value: number | undefined) => void;
   precision: number;
 };
 
@@ -25,7 +25,7 @@ export default function AmountInput({
       if (sourceInfo.source === "prop") {
         return;
       }
-      onChange(floatValue || 0);
+      onChange(floatValue);
     },
     [onChange]
   );
