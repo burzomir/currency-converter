@@ -37,7 +37,7 @@ export default function Converter(props: ConverterProps) {
 
   const convert = (
     data: Data,
-    apply: (value: number) => FormState,
+    finalize: (value: number) => void,
     debounce: Debounce
   ) => {
     clearTimeout(timeoutRef.current);
@@ -55,8 +55,7 @@ export default function Converter(props: ConverterProps) {
           if (requestIdRef.current !== requestId) {
             return;
           }
-          const newState = apply(value);
-          setFormState(newState);
+          finalize(value);
         } catch (_) {
           setServiceUnreachable(true);
         }
@@ -82,10 +81,13 @@ export default function Converter(props: ConverterProps) {
       to: newState.to.currencyCode,
       amount: newState.from.amount,
     };
-    const finalize = (value: number) =>
-      produce(newState, (draft) => {
-        draft.to.amount = value;
-      });
+    const finalize = (value: number) => {
+      setFormState((state) =>
+        produce(state, (draft) => {
+          draft.to.amount = value;
+        })
+      );
+    };
     const currencyCodeChanged =
       formState.from.currencyCode !== newState.from.currencyCode;
     convert(
@@ -106,9 +108,11 @@ export default function Converter(props: ConverterProps) {
       amount: newState.from.amount,
     };
     const finalize = (value: number) =>
-      produce(newState, (draft) => {
-        draft.to.amount = value;
-      });
+      setFormState((state) =>
+        produce(state, (draft) => {
+          draft.to.amount = value;
+        })
+      );
     convert(data, finalize, Debounce.NoDebounce);
   };
 
@@ -123,9 +127,11 @@ export default function Converter(props: ConverterProps) {
       amount: newState.to.amount,
     };
     const finalize = (value: number) =>
-      produce(newState, (draft) => {
-        draft.from.amount = value;
-      });
+      setFormState((state) =>
+        produce(state, (draft) => {
+          draft.from.amount = value;
+        })
+      );
     convert(data, finalize, Debounce.Debounce);
   };
 
