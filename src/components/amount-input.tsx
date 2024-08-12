@@ -1,4 +1,4 @@
-import { useSeparators } from "@/hooks";
+import { Separators } from "@/hooks";
 import { TextField } from "@mui/material";
 import { useCallback, useId } from "react";
 import {
@@ -11,15 +11,17 @@ export type AmountInputProps = {
   value: number | undefined;
   onChange: (value: number | undefined) => void;
   precision: number;
+  separators: Separators;
 };
 
 export default function AmountInput({
   onChange,
   value,
   precision,
+  separators,
 }: AmountInputProps) {
   const id = useId();
-  const { thousandSeparator, decimalSeparator } = useSeparators();
+  const { thousandSeparator, decimalSeparator } = separators;
   const onChange_ = useCallback(
     ({ floatValue }: NumberFormatValues, sourceInfo: SourceInfo) => {
       if (sourceInfo.source === "prop") {

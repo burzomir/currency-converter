@@ -8,6 +8,15 @@ import { useSyncExternalStore } from "react";
  */
 export function useSeparators() {
   const language = useLanguage();
+  return detectSeparators(language);
+}
+
+export type Separators = {
+  decimalSeparator: string | undefined;
+  thousandSeparator: string | undefined;
+};
+
+export function detectSeparators(language: string): Separators {
   const formatter = Intl.NumberFormat(language);
   const decimalSeparator = formatter
     .formatToParts(0.1)

@@ -22,7 +22,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <CssBaseline />
-          <Stack gap={5} height="100vh" justifyContent="center">
+          <Stack gap={5} justifyContent="center">
             <Stack
               direction="row"
               alignItems="center"
