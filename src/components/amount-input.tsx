@@ -9,7 +9,6 @@ import {
 
 export type AmountInputProps = {
   value: number;
-  // eslint-disable-next-line
   onChange: (value: number) => void;
   precision: number;
 };

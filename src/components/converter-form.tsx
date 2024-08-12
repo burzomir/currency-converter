@@ -10,13 +10,9 @@ import AmountInput from "./amount-input";
 export type ConverterFormProps = {
   currencies: Currency[];
   state: FormState;
-  // eslint-disable-next-line
   fromChange: (field: FormField) => void;
-  // eslint-disable-next-line
   toCurrencyChange: (currencyCode: CurrencyCode) => void;
-  // eslint-disable-next-line
   toAmountChange: (amount: number) => void;
-  // eslint-disable-next-line
   onSwap: (formState: FormState) => void;
 };
 

@@ -15,7 +15,7 @@ const lightTheme = createTheme({
   },
 });
 
-export default function ThemeProvider(props: PropsWithChildren<{}>) {
+export default function ThemeProvider(props: PropsWithChildren<void>) {
   const systemTheme = useSystemTheme();
   const theme = (() => {
     switch (systemTheme) {

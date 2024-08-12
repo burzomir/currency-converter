@@ -14,10 +14,8 @@ export type ConverterProps = {
   currencies: Currency[];
 };
 
-// eslint-disable-next-line
 enum Debounce {
-  Debounce,
-  // eslint-disable-next-line
+  Debounce,  
   NoDebounce,
 }
 
@@ -39,16 +37,16 @@ export default function Converter(props: ConverterProps) {
 
   const convert = (
     data: Data,
-    // eslint-disable-next-line
+    
     apply: (value: number) => FormState,
-    // eslint-disable-next-line
+    
     debounce: Debounce
   ) => {
     clearTimeout(timeoutRef.current);
     setServiceUnreachable(false);
     timeoutRef.current = setTimeout(
       async () => {
-        let requestId = crypto.randomUUID();
+        const requestId = crypto.randomUUID();
         requestIdRef.current = requestId;
         try {
           const value = await requestConversion(data);

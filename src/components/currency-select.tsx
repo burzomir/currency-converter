@@ -9,7 +9,6 @@ import { useCallback, useId } from "react";
 export type CurrencySelectProps = {
   currencies: Currency[];
   value: Currency;
-  // eslint-disable-next-line
   onChange: (value: Currency) => void;
 };
 
@@ -20,7 +19,7 @@ export default function CurrencySelect({
 }: CurrencySelectProps) {
   const id = useId();
   const onChange_ = useCallback(
-    (_: any, value: Currency) => {
+    (_: unknown, value: Currency) => {
       onChange(value);
     },
     [onChange]
