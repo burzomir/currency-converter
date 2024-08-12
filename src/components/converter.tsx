@@ -7,7 +7,7 @@ import ConverterForm, {
   initFormState,
 } from "./converter-form";
 import { useEffect, useRef, useState } from "react";
-import { produce } from "immer";
+import { produce, WritableDraft } from "immer";
 import { Alert, Snackbar, SnackbarOrigin } from "@mui/material";
 
 export type ConverterProps = {
@@ -37,7 +37,7 @@ export default function Converter(props: ConverterProps) {
 
   const convert = (
     data: Data,
-    finalize: (value: number) => void,
+    finalize: (value: number, draft: WritableDraft<FormState>) => void,
     debounce: Debounce
   ) => {
     clearTimeout(timeoutRef.current);
@@ -55,7 +55,9 @@ export default function Converter(props: ConverterProps) {
           if (requestIdRef.current !== requestId) {
             return;
           }
-          finalize(value);
+          setFormState((state) =>
+            produce(state, (draft) => finalize(value, draft))
+          );
         } catch (_) {
           setServiceUnreachable(true);
         }
@@ -81,18 +83,14 @@ export default function Converter(props: ConverterProps) {
       to: newState.to.currencyCode,
       amount: newState.from.amount,
     };
-    const finalize = (value: number) => {
-      setFormState((state) =>
-        produce(state, (draft) => {
-          draft.to.amount = value;
-        })
-      );
-    };
+
     const currencyCodeChanged =
       formState.from.currencyCode !== newState.from.currencyCode;
     convert(
       data,
-      finalize,
+      (value, draft) => {
+        draft.to.amount = value;
+      },
       currencyCodeChanged ? Debounce.NoDebounce : Debounce.Debounce
     );
   };
@@ -107,13 +105,13 @@ export default function Converter(props: ConverterProps) {
       to: newState.to.currencyCode,
       amount: newState.from.amount,
     };
-    const finalize = (value: number) =>
-      setFormState((state) =>
-        produce(state, (draft) => {
-          draft.to.amount = value;
-        })
-      );
-    convert(data, finalize, Debounce.NoDebounce);
+    convert(
+      data,
+      (value, draft) => {
+        draft.to.amount = value;
+      },
+      Debounce.NoDebounce
+    );
   };
 
   const toAmountChange = async (amount: number | undefined) => {
@@ -126,13 +124,13 @@ export default function Converter(props: ConverterProps) {
       to: newState.from.currencyCode,
       amount: newState.to.amount,
     };
-    const finalize = (value: number) =>
-      setFormState((state) =>
-        produce(state, (draft) => {
-          draft.from.amount = value;
-        })
-      );
-    convert(data, finalize, Debounce.Debounce);
+    convert(
+      data,
+      (value, draft) => {
+        draft.from.amount = value;
+      },
+      Debounce.Debounce
+    );
   };
 
   const onSwap = (state: FormState) => {
