@@ -30,7 +30,9 @@ export default function ConverterForm({
     detectSeparators(defaultLanguage.code)
   );
 
-  const [language, setLanguage] = React.useState<Language | null>(defaultLanguage);
+  const [language, setLanguage] = React.useState<Language | null>(
+    defaultLanguage
+  );
 
   const changeLanguage = (language: Language | null) => {
     setLanguage(language);
@@ -50,14 +52,15 @@ export default function ConverterForm({
   }, [currencies, state.to.currencyCode]);
 
   return (
-    <Stack>
+    <Stack alignItems="center" spacing={3}>
       <Stack
         direction={{ xs: "column", sm: "row" }}
         spacing={3}
+        width="70%"
         alignItems="center"
-        justifyContent="center"
+        justifyContent="stretch"
       >
-        <Stack gap={3}>
+        <Stack gap={3} flex={1} width={{ xs: "100%" }}>
           <CurrencySelect
             currencies={currencies}
             value={fromCurrency}
@@ -78,7 +81,7 @@ export default function ConverterForm({
         >
           <SwapHoriz fontSize="large" />
         </IconButton>
-        <Stack gap={3}>
+        <Stack gap={3} flex={1} width={{ xs: "100%" }}>
           <CurrencySelect
             currencies={currencies}
             value={toCurrency}
@@ -92,18 +95,20 @@ export default function ConverterForm({
           />
         </Stack>
       </Stack>
-      <FormGroup>
-        <LanguageSelect
-          label="Number formatting"
-          size="small"
-          language={language}
-          onChange={changeLanguage}
-        />
-        <FormHelperText>
-          Try to change number formatting if you are not able to type the
-          decimal separator using your keyboard
-        </FormHelperText>
-      </FormGroup>
+      <Stack width="70%">
+        <FormGroup>
+          <LanguageSelect
+            label="Number formatting"
+            size="small"
+            language={language}
+            onChange={changeLanguage}
+          />
+          <FormHelperText>
+            Try to change number formatting if you are not able to type in the
+            decimal separator using your keyboard
+          </FormHelperText>
+        </FormGroup>
+      </Stack>
     </Stack>
   );
 }

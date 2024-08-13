@@ -37,6 +37,7 @@ export default function CurrencySelect({
       disableClearable
       disablePortal
       size="small"
+      fullWidth
     />
   );
 }

@@ -43,6 +43,7 @@ export default function AmountInput({
       onValueChange={onChange_}
       decimalScale={precision}
       inputProps={{ inputMode: "decimal" }}
+      fullWidth
     />
   );
 }
