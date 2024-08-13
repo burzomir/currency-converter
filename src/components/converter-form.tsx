@@ -2,7 +2,13 @@
 
 import { Currency, CurrencyCode } from "@/types";
 import { SwapHoriz } from "@mui/icons-material";
-import { FormGroup, FormHelperText, IconButton, Stack } from "@mui/material";
+import {
+  Divider,
+  FormGroup,
+  FormHelperText,
+  IconButton,
+  Stack,
+} from "@mui/material";
 import * as React from "react";
 import CurrencySelect from "./currency-select";
 import AmountInput from "./amount-input";
@@ -54,13 +60,13 @@ export default function ConverterForm({
   return (
     <Stack alignItems="center" spacing={3}>
       <Stack
-        direction={{ xs: "column", sm: "row" }}
+        direction={direction}
         spacing={3}
-        width="70%"
+        width={width}
         alignItems="center"
         justifyContent="stretch"
       >
-        <Stack gap={3} flex={1} width={{ xs: "100%" }}>
+        <Stack gap={3} flex={1} width="100%">
           <CurrencySelect
             currencies={currencies}
             value={fromCurrency}
@@ -81,7 +87,7 @@ export default function ConverterForm({
         >
           <SwapHoriz fontSize="large" />
         </IconButton>
-        <Stack gap={3} flex={1} width={{ xs: "100%" }}>
+        <Stack gap={3} flex={1} width="100%">
           <CurrencySelect
             currencies={currencies}
             value={toCurrency}
@@ -95,7 +101,10 @@ export default function ConverterForm({
           />
         </Stack>
       </Stack>
-      <Stack width="70%">
+      <Stack width={width}>
+        <Divider flexItem />
+      </Stack>
+      <Stack width={width}>
         <FormGroup>
           <LanguageSelect
             label="Number formatting"
@@ -112,6 +121,10 @@ export default function ConverterForm({
     </Stack>
   );
 }
+
+const direction = { xs: "column" as const, sm: "row" as const };
+
+const width = { xs: "100%", sm: "70%" };
 
 export type FormState = {
   from: FormField;
