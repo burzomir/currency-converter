@@ -32,6 +32,7 @@ export default function LanguageSelect(props: LanguageSelectProps) {
         size={props.size}
         onChange={onChange}
         renderInput={(params) => <TextField {...params} label={props.label} />}
+        isOptionEqualToValue={(o1, o2) => o1.code === o2.code}
       />
     </>
   );
