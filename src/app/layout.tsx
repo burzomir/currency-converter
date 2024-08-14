@@ -24,6 +24,7 @@ export default function RootLayout({
           <CssBaseline />
           <Container>
             <Stack gap={5} justifyContent="center">
+              <Stack />
               <Stack
                 direction="row"
                 alignItems="center"
