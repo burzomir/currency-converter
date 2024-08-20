@@ -1,7 +1,11 @@
 "use client";
 
+import {
+  ColorMode,
+  useColorModeDetector,
+} from "@burzomir/color-mode-detector-react";
 import { createTheme, ThemeProvider as MUIThemeProvider } from "@mui/material";
-import { PropsWithChildren, useSyncExternalStore } from "react";
+import { PropsWithChildren } from "react";
 
 const darkTheme = createTheme({
   palette: {
@@ -16,39 +20,14 @@ const lightTheme = createTheme({
 });
 
 export default function ThemeProvider(props: PropsWithChildren<void>) {
-  const systemTheme = useSystemTheme();
+  const systemTheme = useColorModeDetector();
   const theme = (() => {
     switch (systemTheme) {
-      case "dark":
+      case ColorMode.Dark:
         return darkTheme;
-      case "light":
+      case ColorMode.Light:
         return lightTheme;
     }
   })();
   return <MUIThemeProvider theme={theme}>{props.children}</MUIThemeProvider>;
-}
-
-function useSystemTheme() {
-  return useSyncExternalStore<"dark" | "light">(
-    subscribe,
-    getSnapshot,
-    getServerSnapshot
-  );
-}
-
-const query = "(prefers-color-scheme: dark)";
-
-function getSnapshot() {
-  return window.matchMedia(query).matches ? "dark" : "light";
-}
-
-function subscribe(callback: () => void) {
-  window.matchMedia(query).addEventListener("change", callback);
-  return () => {
-    window.matchMedia(query).removeEventListener("change", callback);
-  };
-}
-
-function getServerSnapshot() {
-  return "dark" as const;
 }
