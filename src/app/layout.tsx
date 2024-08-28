@@ -6,7 +6,11 @@ import "@fontsource/roboto/700.css";
 import { Container, CssBaseline, Stack, Typography } from "@mui/material";
 import { ReactNode } from "react";
 import { CurrencyExchange } from "@mui/icons-material";
-import ThemeProvider from "@/components/theme-provider";
+import dynamic from "next/dynamic";
+
+const ThemeProvider = dynamic(() => import("@/components/theme-provider"), {
+  ssr: false,
+});
 
 export const metadata: Metadata = {
   title: "Currency converter",
