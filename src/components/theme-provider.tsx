@@ -5,7 +5,7 @@ import {
   useColorModeDetector,
 } from "@burzomir/color-mode-detector-react";
 import { createTheme, ThemeProvider as MUIThemeProvider } from "@mui/material";
-import { PropsWithChildren } from "react";
+import { ReactNode } from "react";
 
 const darkTheme = createTheme({
   palette: {
@@ -19,7 +19,9 @@ const lightTheme = createTheme({
   },
 });
 
-export default function ThemeProvider(props: PropsWithChildren<void>) {
+export default function ThemeProvider(props: {
+  children?: ReactNode | undefined;
+}) {
   const systemTheme = useColorModeDetector();
   const theme = (() => {
     switch (systemTheme) {
